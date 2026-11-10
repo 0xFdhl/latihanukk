@@ -19,7 +19,7 @@ return new class extends Migration
             ->restrictOnDelete();
 
         $table->string('name');
-        $table->integer('stock');
+        $table->integer('stock')->default(0);
         $table->decimal('price', 12, 2);
         $table->date('entry_date');
 
