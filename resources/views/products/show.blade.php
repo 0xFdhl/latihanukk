@@ -1,69 +1,70 @@
-
 @extends('layouts.app')
 
 @section('title', 'Detail Barang')
+@section('crumb', 'products / detail')
 
 @section('content')
 
-<div class="mb-4">
-    <h4 class="content-title">Detail Barang</h4>
-    <p class="text-muted">Informasi lengkap barang inventaris.</p>
-</div>
-
-<div class="card p-4">
-
-    <h5 class="mb-4">Informasi Barang</h5>
-
-    <div class="row mb-3">
-
-        <div class="col-md-6 mb-3">
-            <label class="text-muted">ID Barang</label>
-            <h6>{{ $product->id }}</h6>
-        </div>
-
-        <div class="col-md-6 mb-3">
-            <label class="text-muted">Nama Barang</label>
-            <h6>{{ $product->name }}</h6>
-        </div>
-
-        <div class="col-md-6 mb-3">
-            <label class="text-muted">Kategori</label>
-            <h6>{{ $product->category->name }}</h6>
-        </div>
-
-        <div class="col-md-6 mb-3">
-            <label class="text-muted">Jumlah Stok</label>
-            <h6>{{ $product->stock }}</h6>
-        </div>
-
-        <div class="col-md-6 mb-3">
-            <label class="text-muted">Harga Barang</label>
-            <h6>
-                Rp {{ number_format($product->price, 0, ',', '.') }}
-            </h6>
-        </div>
-
-        <div class="col-md-6 mb-3">
-            <label class="text-muted">Tanggal Masuk</label>
-            <h6>{{ $product->entry_date->format('d-m-Y') }}</h6>
-        </div>
-
-    </div>
-
-    <hr>
-
+<div class="page-head">
     <div>
-        <a href="{{ route('products.edit', $product->id) }}"
-            class="btn btn-warning">
+        <div class="eyebrow">// Inventaris / Produk</div>
+        <h1 class="page-title">Detail Barang</h1>
+        <p class="page-desc">Informasi lengkap barang inventaris.</p>
+    </div>
+    <div class="row-actions">
+        <a href="{{ route('products.edit', $product->id) }}" class="btn-x primary">
             <i class="bi bi-pencil"></i> Edit Barang
         </a>
-
-        <a href="{{ route('products.index') }}"
-            class="btn btn-secondary">
-            Kembali
+        <a href="{{ route('products.index') }}" class="btn-x ghost">
+            <i class="bi bi-arrow-left"></i> Kembali
         </a>
     </div>
+</div>
 
+<div class="panel" style="max-width:860px;">
+    <div class="panel-head">
+        <span class="panel-title">
+            <span class="bracket">[</span> {{ $product->name }} <span class="bracket">]</span>
+        </span>
+        <span class="chip"><i class="bi bi-hash"></i>ID {{ $product->id }}</span>
+    </div>
+
+    <div class="table-wrap">
+        <dl class="detail-grid" style="margin:0;">
+            <div class="detail-item">
+                <dt>Nama Barang</dt>
+                <dd>{{ $product->name }}</dd>
+            </div>
+            <div class="detail-item">
+                <dt>Kategori</dt>
+                <dd><span class="chip"><i class="bi bi-tag"></i>{{ $product->category->name }}</span></dd>
+            </div>
+            <div class="detail-item">
+                <dt>Jumlah Stok</dt>
+                <dd>
+                    @if ($product->stock > 10)
+                        <span class="chip ok">{{ $product->stock }} unit</span>
+                    @elseif ($product->stock > 0)
+                        <span class="chip low">{{ $product->stock }} unit</span>
+                    @else
+                        <span class="chip out">habis</span>
+                    @endif
+                </dd>
+            </div>
+            <div class="detail-item">
+                <dt>Harga Barang</dt>
+                <dd>Rp {{ number_format($product->price, 0, ',', '.') }}</dd>
+            </div>
+            <div class="detail-item">
+                <dt>Tanggal Masuk</dt>
+                <dd>{{ $product->entry_date->format('d-m-Y') }}</dd>
+            </div>
+            <div class="detail-item">
+                <dt>Terakhir Diperbarui</dt>
+                <dd class="dim">{{ $product->updated_at->format('d-m-Y H:i') }}</dd>
+            </div>
+        </dl>
+    </div>
 </div>
 
 @endsection

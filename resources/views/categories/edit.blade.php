@@ -1,49 +1,51 @@
-
 @extends('layouts.app')
 
 @section('title', 'Edit Kategori')
+@section('crumb', 'categories / edit')
 
 @section('content')
 
-<div class="mb-4">
-    <h4 class="content-title">Edit Kategori</h4>
-    <p class="text-muted">Perbarui nama kategori barang.</p>
+<div class="page-head">
+    <div>
+        <div class="eyebrow">// Inventaris / Kategori</div>
+        <h1 class="page-title">Edit Kategori</h1>
+        <p class="page-desc">Perbarui nama kategori barang.</p>
+    </div>
+    <a href="{{ route('categories.index') }}" class="btn-x ghost">
+        <i class="bi bi-arrow-left"></i> Kembali
+    </a>
 </div>
 
-<div class="card p-4">
+<div class="panel" style="max-width:620px;">
+    <div class="panel-head">
+        <span class="panel-title"><span class="bracket">[</span> Form Edit Kategori <span class="bracket">]</span></span>
+        <span class="chip"><i class="bi bi-hash"></i>ID {{ $category->id }}</span>
+    </div>
+    <div class="panel-body">
+        <form action="{{ route('categories.update', $category->id) }}" method="POST">
+            @csrf
+            @method('PUT')
 
-    <form action="{{ route('categories.update', $category->id) }}"
-        method="POST">
+            <div class="field">
+                <label>Nama Kategori <span class="req">*</span></label>
+                <input type="text" name="name"
+                       class="input @error('name') invalid @enderror"
+                       value="{{ old('name', $category->name) }}" required>
+                @error('name')
+                    <div class="field-error"><i class="bi bi-x-circle"></i> {{ $message }}</div>
+                @enderror
+            </div>
 
-        @csrf
-        @method('PUT')
+            <hr class="sep">
 
-        <div class="mb-3">
-            <label class="form-label">Nama Kategori</label>
-
-            <input type="text"
-                name="name"
-                class="form-control @error('name') is-invalid @enderror"
-                value="{{ old('name', $category->name) }}">
-
-            @error('name')
-                <div class="invalid-feedback">{{ $message }}</div>
-            @enderror
-        </div>
-
-        <hr>
-
-        <button type="submit" class="btn btn-success">
-            <i class="bi bi-save"></i> Update Kategori
-        </button>
-
-        <a href="{{ route('categories.index') }}"
-            class="btn btn-secondary">
-            Kembali
-        </a>
-
-    </form>
-
+            <div class="form-foot">
+                <button type="submit" class="btn-x primary">
+                    <i class="bi bi-save"></i> Update Kategori
+                </button>
+                <a href="{{ route('categories.index') }}" class="btn-x ghost">Batal</a>
+            </div>
+        </form>
+    </div>
 </div>
 
 @endsection

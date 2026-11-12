@@ -1,165 +1,118 @@
-
 @extends('layouts.app')
 
 @section('title', 'Dashboard')
+@section('crumb', 'dashboard')
 
 @section('content')
 
-<div class="mb-4">
-    <h4 class="content-title">Dashboard</h4>
-    <p class="text-muted">
-        Selamat datang di Sistem Manajemen Inventaris Barang.
-    </p>
+<div class="page-head">
+    <div>
+        <div class="eyebrow">// Selamat datang kembali</div>
+        <h1 class="page-title">Dashboard</h1>
+        <p class="page-desc">Ringkasan inventaris barang gudang &mdash; {{ date('d M Y') }}.</p>
+    </div>
+    <a href="{{ route('products.create') }}" class="btn-x primary">
+        <i class="bi bi-plus-lg"></i> Tambah Barang
+    </a>
 </div>
 
 <!-- STATISTIK -->
-<div class="row g-4">
-
-    <div class="col-xl-3 col-md-6">
-        <div class="card p-4">
-            <div class="d-flex justify-content-between">
-                <div>
-                    <p class="text-muted mb-2">Total Barang</p>
-                    <h3>{{ $totalProducts }}</h3>
-                </div>
-                <i class="bi bi-box-seam fs-1 text-primary"></i>
-            </div>
-        </div>
+<div class="stats-grid">
+    <div class="stat">
+        <span class="stat-idx">01</span>
+        <div class="stat-label">Total Barang</div>
+        <div class="stat-value">{{ $totalProducts }}</div>
+        <div class="stat-foot"><i class="bi bi-box-seam"></i> item terdaftar</div>
     </div>
-
-    <div class="col-xl-3 col-md-6">
-        <div class="card p-4">
-            <div class="d-flex justify-content-between">
-                <div>
-                    <p class="text-muted mb-2">Total Kategori</p>
-                    <h3>{{ $totalCategories }}</h3>
-                </div>
-                <i class="bi bi-tags fs-1 text-success"></i>
-            </div>
-        </div>
+    <div class="stat">
+        <span class="stat-idx">02</span>
+        <div class="stat-label">Total Kategori</div>
+        <div class="stat-value">{{ $totalCategories }}</div>
+        <div class="stat-foot"><i class="bi bi-tags"></i> kategori aktif</div>
     </div>
-
-    <div class="col-xl-3 col-md-6">
-        <div class="card p-4">
-            <div class="d-flex justify-content-between">
-                <div>
-                    <p class="text-muted mb-2">Total Stok</p>
-                    <h3>{{ number_format($totalStock) }}</h3>
-                </div>
-                <i class="bi bi-archive fs-1 text-warning"></i>
-            </div>
-        </div>
+    <div class="stat">
+        <span class="stat-idx">03</span>
+        <div class="stat-label">Total Stok</div>
+        <div class="stat-value">{{ number_format($totalStock) }}</div>
+        <div class="stat-foot"><i class="bi bi-archive"></i> unit tersimpan</div>
     </div>
-
-    <div class="col-xl-3 col-md-6">
-        <div class="card p-4">
-            <div class="d-flex justify-content-between">
-                <div>
-                    <p class="text-muted mb-2">Nilai Inventaris</p>
-                    <h5>Rp {{ number_format($totalValue, 0, ',', '.') }}</h5>
-                </div>
-                <i class="bi bi-cash-stack fs-1 text-danger"></i>
-            </div>
+    <div class="stat">
+        <span class="stat-idx">04</span>
+        <div class="stat-label">Nilai Inventaris</div>
+        <div class="stat-value" style="font-size:19px;">
+            Rp {{ number_format($totalValue, 0, ',', '.') }}
         </div>
+        <div class="stat-foot"><i class="bi bi-cash-stack"></i> estimasi aset</div>
     </div>
-
 </div>
-
 
 <!-- PRODUK TERBARU -->
-<div class="card p-4 mt-4">
-
-    <div class="d-flex justify-content-between align-items-center mb-3">
-
-        <h5 class="mb-0">Barang Terbaru</h5>
-
-        <a href="{{ route('products.index') }}"
-           class="btn btn-primary btn-sm">
-            Lihat Semua
-            <i class="bi bi-arrow-right"></i>
+<div class="panel">
+    <div class="panel-head">
+        <span class="panel-title"><span class="bracket">[</span> Barang Terbaru <span class="bracket">]</span></span>
+        <a href="{{ route('products.index') }}" class="btn-x ghost sm">
+            Lihat Semua <i class="bi bi-arrow-right"></i>
         </a>
-
     </div>
-
-    <div class="table-responsive">
-
-        <table class="table table-hover">
-
-            <thead>
-                <tr>
-                    <th>No</th>
-                    <th>Nama Barang</th>
-                    <th>Kategori</th>
-                    <th>Stok</th>
-                    <th>Harga</th>
-                </tr>
-            </thead>
-
-            <tbody>
-
-                @forelse($latestProducts as $product)
-
-                <tr>
-                    <td>{{ $loop->iteration }}</td>
-                    <td>{{ $product->name }}</td>
-                    <td>{{ $product->category->name }}</td>
-                    <td>{{ $product->stock }}</td>
-                    <td>
-                        Rp {{ number_format($product->price, 0, ',', '.') }}
-                    </td>
-                </tr>
-
-                @empty
-
-                <tr>
-                    <td colspan="5" class="text-center text-muted py-4">
-                        Belum ada data barang.
-                    </td>
-                </tr>
-
-                @endforelse
-
-            </tbody>
-
-        </table>
-
+    <div class="panel-body flush">
+        <div class="table-wrap">
+            <table class="data">
+                <thead>
+                    <tr>
+                        <th style="width:50px;">No</th>
+                        <th>Nama Barang</th>
+                        <th>Kategori</th>
+                        <th>Stok</th>
+                        <th>Harga</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($latestProducts as $product)
+                        <tr>
+                            <td class="mono-dim">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</td>
+                            <td class="strong">{{ $product->name }}</td>
+                            <td><span class="chip"><i class="bi bi-tag"></i>{{ $product->category->name }}</span></td>
+                            <td class="num">{{ $product->stock }}</td>
+                            <td class="num">Rp {{ number_format($product->price, 0, ',', '.') }}</td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="5" style="padding:0;">
+                                <div class="empty">
+                                    <i class="bi bi-inbox"></i>
+                                    <div class="cmd"><span class="prompt">$</span> data barang &mdash; belum ada data.</div>
+                                </div>
+                            </td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
     </div>
-
 </div>
 
-
 <!-- STATISTIK KATEGORI -->
-<div class="card p-4 mt-4">
-
-    <h5 class="mb-4">Jumlah Barang per Kategori</h5>
-
-    @forelse($categoryStats as $category)
-
-        <div class="mb-3">
-
-            <div class="d-flex justify-content-between mb-2">
-                <span>{{ $category->name }}</span>
-                <strong>{{ $category->products_count }} Barang</strong>
-            </div>
-
-            <div class="progress" style="height: 10px;">
-
-                <div class="progress-bar bg-primary"
-                     style="width: {{ $totalProducts > 0 ? ($category->products_count / $totalProducts) * 100 : 0 }}%">
+<div class="panel">
+    <div class="panel-head">
+        <span class="panel-title"><span class="bracket">[</span> Jumlah Barang per Kategori <span class="bracket">]</span></span>
+    </div>
+    <div class="panel-body">
+        @forelse($categoryStats as $category)
+            <div class="bar-row">
+                <div class="bar-meta">
+                    <span>{{ $category->name }}</span>
+                    <span class="val">{{ $category->products_count }} barang</span>
                 </div>
-
+                <div class="bar">
+                    <span style="width: {{ $totalProducts > 0 ? round(($category->products_count / $totalProducts) * 100, 1) : 0 }}%;"></span>
+                </div>
             </div>
-
-        </div>
-
-    @empty
-
-        <p class="text-muted">
-            Belum ada kategori barang.
-        </p>
-
-    @endforelse
-
+        @empty
+            <div class="empty" style="padding:24px;">
+                <div class="cmd"><span class="prompt">$</span> belum ada kategori barang.</div>
+            </div>
+        @endforelse
+    </div>
 </div>
 
 @endsection
